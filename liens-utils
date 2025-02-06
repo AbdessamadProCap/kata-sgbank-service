@@ -1,0 +1,15 @@
+Swagger URL : http://localhost:8080/swagger-ui/index.html
+Actuator URLs :
+"actuator": http://localhost:8080/actuator
+"health"  : http://localhost:8080/actuator/health
+"info"    : http://localhost:8080/actuator/info
+"metrics" : http://localhost:8080/actuator/metrics
+
+Deposit Post Rest
+url : localhost:8080/api/v1/bankaccount/deposit
+Json raw :
+{
+   "accountId":"12",
+   "amount":"0",
+   "description":"déposer 500 EUR dans mon compte bancaire"
+}
