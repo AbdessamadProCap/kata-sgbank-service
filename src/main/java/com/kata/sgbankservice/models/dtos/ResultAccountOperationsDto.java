@@ -1,4 +1,4 @@
-package com.kata.sgbankservice.models.entities;
+package com.kata.sgbankservice.models.dtos;
 
 import com.kata.sgbankservice.models.enums.AccountStatus;
 import lombok.AllArgsConstructor;
@@ -6,18 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountEntity {
+public class ResultAccountOperationsDto {
 
-    private Long id;
+    private Long accountId;
     private BigDecimal balance;
-    private Date createdAt;
     private AccountStatus status;
-    private List<AccountOperationEntity> accountOperations;
+    private List<AccountOperationDto> accountOperations;
 
 }

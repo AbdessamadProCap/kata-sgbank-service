@@ -5,11 +5,54 @@ Actuator URLs :
 "info"    : http://localhost:8080/actuator/info
 "metrics" : http://localhost:8080/actuator/metrics
 
-Deposit Post Rest
+US1 Deposit Rest with http POST:
 url : localhost:8080/api/v1/bankaccount/deposit
 Json raw :
 {
    "accountId":"12",
    "amount":"0",
    "description":"déposer 500 EUR dans mon compte bancaire"
+}
+
+US2 Withdraw Rest with http POST:
+url : localhost:8080/api/v1/bankaccount/withdraw
+
+Json raw :
+{
+    "accountId":"11",
+    "amount":"1000",
+    "description":"retirer 1000 EUR de mon solde"
+}
+
+US3 Statement printing with http GET :
+Json raw : nothing
+
+Json Response :
+{
+    "accountId": 11,
+    "balance": 9600,
+    "status": "ACTIVATED",
+    "accountOperations": [
+        {
+            "id": 984,
+            "operationDate": "2025-02-06T14:23:01.843+00:00",
+            "amount": 500,
+            "type": "DEPOSIT",
+            "description": "déposer 500 EUR dans mon compte bancaire"
+        },
+        {
+            "id": 601,
+            "operationDate": "2025-02-06T14:23:12.338+00:00",
+            "amount": 100,
+            "type": "DEPOSIT",
+            "description": "déposer 100 EUR dans mon compte bancaire"
+        },
+        {
+            "id": 236,
+            "operationDate": "2025-02-06T14:23:27.232+00:00",
+            "amount": 1000,
+            "type": "WITHDRAW",
+            "description": "retirer 1000 EUR de mon solde"
+        }
+    ]
 }

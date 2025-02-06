@@ -3,6 +3,7 @@ package com.kata.sgbankservice.controllers;
 import com.kata.sgbankservice.exceptionshandlers.AccountNotFoundException;
 import com.kata.sgbankservice.models.dtos.AccountDto;
 import com.kata.sgbankservice.models.dtos.DepositDto;
+import com.kata.sgbankservice.models.dtos.ResultAccountOperationsDto;
 import com.kata.sgbankservice.models.dtos.WithdrawDto;
 import com.kata.sgbankservice.services.AccountBankService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,10 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/bankaccount")
@@ -41,6 +39,14 @@ public class BankAccountController {
     public ResponseEntity<AccountDto> withdraw(@Valid @RequestBody WithdrawDto withdrawDto) throws AccountNotFoundException {
         final AccountDto accountDto = this.accountBankService.withdraw(withdrawDto);
         return new ResponseEntity<>(accountDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{accountId}/operations")
+    @Operation(summary = "Get account operations history", description = "Returns the history of operations for a given accountId")
+    @Parameter(description = "accountId", required = true)
+    public ResponseEntity<ResultAccountOperationsDto> getHistory(@PathVariable Long accountId) {
+        final ResultAccountOperationsDto resultAccountOperationsDto = this.accountBankService.accountOperationsHistory(accountId);
+        return new ResponseEntity<>(resultAccountOperationsDto, HttpStatus.OK);
     }
 
 }
