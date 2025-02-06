@@ -1,12 +1,10 @@
 package com.kata.sgbankservice.services.impl;
 
-import com.kata.sgbankservice.exceptionshandlers.AccountNotFoundException;
-import com.kata.sgbankservice.exceptionshandlers.InvalidAmountException;
-import com.kata.sgbankservice.exceptionshandlers.SuspendedAccountException;
-import com.kata.sgbankservice.exceptionshandlers.UnknownAccountIdException;
+import com.kata.sgbankservice.exceptionshandlers.*;
 import com.kata.sgbankservice.mappers.AccountMapper;
 import com.kata.sgbankservice.models.dtos.AccountDto;
 import com.kata.sgbankservice.models.dtos.DepositDto;
+import com.kata.sgbankservice.models.dtos.WithdrawDto;
 import com.kata.sgbankservice.models.entities.AccountEntity;
 import com.kata.sgbankservice.models.enums.AccountStatus;
 import com.kata.sgbankservice.services.AccountBankService;
@@ -73,6 +71,32 @@ public class AccountBankServiceImpl implements AccountBankService {
         bankAccount.setBalance(newBalanceValue);
 
         log.info("The account with id : {} has been successfully credited", +accountId);
+        return accountMapper.fromBankAccountEntityToDto(bankAccount);
+    }
+
+    @Override
+    public AccountDto withdraw(final WithdrawDto withdrawDto) {
+
+        log.info("Starting new withdraw operation !");
+
+        final Long accountId = withdrawDto.getAccountId();
+        final BigDecimal amount = withdrawDto.getAmount();
+        final String description = withdrawDto.getDescription();
+
+        validateCommonInputs(accountId, amount);
+
+        final AccountEntity bankAccount = getAccountById(accountId).orElseThrow(() -> new AccountNotFoundException("BankAccount not found"));
+
+        verifyIfAccountIsSuspended(bankAccount);
+
+        if (bankAccount.getBalance().compareTo(amount) < 0)
+            throw new BalanceNotSufficientException("Balance not sufficient");
+
+        final BigDecimal newBalanceValue = bankAccount.getBalance().subtract(amount);
+        bankAccount.setBalance(newBalanceValue);
+
+        log.info("The account with id : {} has been successfully debited", +accountId);
+
         return accountMapper.fromBankAccountEntityToDto(bankAccount);
     }
 

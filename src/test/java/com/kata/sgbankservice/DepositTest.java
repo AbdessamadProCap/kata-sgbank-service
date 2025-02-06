@@ -3,8 +3,10 @@ package com.kata.sgbankservice;
 import com.kata.sgbankservice.exceptionshandlers.InvalidAmountException;
 import com.kata.sgbankservice.exceptionshandlers.SuspendedAccountException;
 import com.kata.sgbankservice.exceptionshandlers.UnknownAccountIdException;
+import com.kata.sgbankservice.models.dtos.AccountDto;
 import com.kata.sgbankservice.models.dtos.DepositDto;
 import com.kata.sgbankservice.services.AccountBankService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class DepositTest {
@@ -25,6 +28,12 @@ class DepositTest {
     @BeforeEach
     public void setUp() {
         depositDto = new DepositDto(11L, new BigDecimal(150), "déposer 150 dans mon compte");
+    }
+
+    @Test
+    public void testDeposit() {
+        AccountDto accountDto = accountBankService.deposit(depositDto);
+        Assertions.assertEquals(new BigDecimal(10150), accountDto.getBalance());
     }
 
     @Test

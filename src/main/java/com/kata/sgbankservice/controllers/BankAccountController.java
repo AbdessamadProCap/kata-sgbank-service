@@ -3,6 +3,7 @@ package com.kata.sgbankservice.controllers;
 import com.kata.sgbankservice.exceptionshandlers.AccountNotFoundException;
 import com.kata.sgbankservice.models.dtos.AccountDto;
 import com.kata.sgbankservice.models.dtos.DepositDto;
+import com.kata.sgbankservice.models.dtos.WithdrawDto;
 import com.kata.sgbankservice.services.AccountBankService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,6 +32,14 @@ public class BankAccountController {
     @Parameter(description = "accountId and amount", required = true)
     public ResponseEntity<AccountDto> deposit(@Valid @RequestBody DepositDto depositDto) throws AccountNotFoundException {
         final AccountDto accountDto = this.accountBankService.deposit(depositDto);
+        return new ResponseEntity<>(accountDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/withdraw")
+    @Operation(summary = "Withdraw from a bank account", description = "Withdraw a given amount from a given bank account. If insufficient funds, returns an error")
+    @Parameter(description = "accountId and amount", required = true)
+    public ResponseEntity<AccountDto> withdraw(@Valid @RequestBody WithdrawDto withdrawDto) throws AccountNotFoundException {
+        final AccountDto accountDto = this.accountBankService.withdraw(withdrawDto);
         return new ResponseEntity<>(accountDto, HttpStatus.OK);
     }
 
